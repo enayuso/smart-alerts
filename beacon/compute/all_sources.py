@@ -101,8 +101,38 @@ def google_search(query, serpapi_key, num_results=5):
     }
     response = requests.get(url, params=params)
     print("Audit: Querying google search.")
+
     if response.status_code == 200:
-        results = response.json().get("organic_results", [])
+        data = response.json()
+        results = data.get("organic_results", [])
+
+        # If organic_results is empty, try other result types
+        if not results:
+            logger.info("Organic results are empty. Trying other result types.")
+
+            # Check for related searches
+            related_searches = data.get("related_searches", [])
+            for item in related_searches:
+                results.append({
+                    "title": item.get("query", ""),
+                    "link": item.get("link", ""),
+                    "snippet": "Related search",
+                })
+
+            # Check for scholarly articles
+            scholarly_articles = data.get("scholarly_articles", {}).get("articles", [])
+            for article in scholarly_articles:
+                results.append({
+                    "title": article.get("title", ""),
+                    "link": article.get("link", ""),
+                    "snippet": "Scholarly article",
+                })
+
+            # Additional checks can be added here for other result types
+            if not results:
+                logger.error("No relevant results found in the SerpAPI response.")
+                return []
+
         return [
             {
                 "title": result.get("title", ""),
@@ -116,7 +146,6 @@ def google_search(query, serpapi_key, num_results=5):
             f"Error with Google Search: {response.status_code} {response.text}"
         )
         return []
-
 
 
 def google_news(query, serpapi_key, num_results=5, date_cutoff=None):
@@ -195,6 +224,7 @@ def get_serpapi_data(query, num_results=5):
 
     search_results = google_search(query, serpapi_key, num_results)
     news_results = google_news(query, serpapi_key, num_results)
+
     return {"search_results": search_results, "news_results": news_results}
 
 

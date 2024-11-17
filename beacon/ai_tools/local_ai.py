@@ -24,17 +24,17 @@ def summarize_disaster_report(message):
                 Do not include any phrases that indicate you are summarizing or that you are an AI agent. Present the 
                 information directly and without any introductory or concluding remarks.Below is the text to 
                 analyze:\n\n {message}''')
-    query_llm(user_query)
+    return query_llm(user_query)
 
-def query_llm(prompt, model="llama-3.2-1b-instruct", temperature=0, max_tokens=20000):
+def query_llm(prompt, model="llama-3.2-3b-instruct", temperature=0, max_tokens=20000):
     """
     Queries the locally hosted LLM and extracts the assistant's response.
 
     Parameters:
         prompt (str): The user's input query.
         model (str): The model to use for generating the response.
-        temperature (float): Sampling temperature (default: 0.7).
-        max_tokens (int): Maximum number of tokens to generate (default: 150).
+        temperature (float): Sampling temperature (default: 0.0).
+        max_tokens (int): Maximum number of tokens to generate (default: 20000).
 
     Returns:
         str: The assistant's response content.

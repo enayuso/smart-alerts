@@ -14,7 +14,8 @@ from beacon.compute.all_sources import (
 from beacon.ai_tools.google_gen_ai import screen_tweets_gemini
 from beacon.compute.persist import persist_disaster_event
 from beacon.util.logger import logger
-from beacon.util.mock_utils import get_mock_tavily_response
+from beacon.util.mock_utils import get_mock_tavily_response, get_mock_serpapi_response
+
 
 async def smart_alerts(query: str, mock_disaster: bool=False):
 
@@ -23,7 +24,7 @@ async def smart_alerts(query: str, mock_disaster: bool=False):
     logger.info("Fetched data from Tavily.")
 
     # Fetch data from SerpAPI (Google)
-    serpapi_data = get_serpapi_data(query, num_results=50)
+    serpapi_data = get_mock_serpapi_response() if mock_disaster else get_serpapi_data(query, num_results=50)
     logger.info("Fetched data from SerpAPI.")
 
     # Prepare data for LLM
@@ -34,6 +35,7 @@ async def smart_alerts(query: str, mock_disaster: bool=False):
 
     # use nlp to pre-classify disaster events
     llm_input = prepare_data_for_llm(combined_data, use_nlp=True)
+    # leaving these messages as print output in console is distinctly recognizable from logger output
     print('Audit: LLM input ', llm_input)
     logger.info("Prepared data for LLM.")
 
@@ -55,6 +57,3 @@ async def smart_alerts(query: str, mock_disaster: bool=False):
 
     else:
         logger.info("No disaster-related content found.")
-
-
-
