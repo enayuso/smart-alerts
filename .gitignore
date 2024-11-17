@@ -1,4 +1,32 @@
+# Environment variables
 /.env
-/beacon/local_run_helper.py
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+
+# Database files
 *.db
 /*/accounts.db
+
+# IDE specific files
+.idea/
+.vscode/
+
+# Local run helper script
+/beacon/local_run_helper.py
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Other
+*.swp

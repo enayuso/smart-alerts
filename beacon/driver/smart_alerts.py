@@ -48,12 +48,9 @@ async def smart_alerts(query: str, mock_disaster: bool=False):
         event_id = str(uuid.uuid4())
 
         logger.info(event_id, llm_input, screen_result, mock = False)
-        summarized_message = summarize_disaster_report(screen_result)
-        print("audit: summarized message: " + summarized_message)
-
         # persist the disaster event
         persist_disaster_event(
-           event_id, llm_input, summarized_message, mock=False
+           event_id, llm_input, screen_result, mock=False
         )
 
     else:
