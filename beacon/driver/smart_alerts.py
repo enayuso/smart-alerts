@@ -5,6 +5,7 @@ from sys import audit
 
 from charset_normalizer.cd import alpha_unicode_split
 
+from beacon.ai_tools.local_ai import summarize_disaster_report
 from beacon.compute.all_sources import (
     get_tavily_data,
     get_serpapi_data,
@@ -14,7 +15,6 @@ from beacon.ai_tools.google_gen_ai import screen_tweets_gemini
 from beacon.compute.persist import persist_disaster_event
 from beacon.util.logger import logger
 from beacon.util.mock_utils import get_mock_tavily_response
-
 
 async def smart_alerts(query: str, mock_disaster: bool=False):
 
@@ -31,6 +31,7 @@ async def smart_alerts(query: str, mock_disaster: bool=False):
         'tavily': tavily_data,
         'serpapi': serpapi_data,
     }
+
     # use nlp to pre-classify disaster events
     llm_input = prepare_data_for_llm(combined_data, use_nlp=True)
     print('Audit: LLM input ', llm_input)
@@ -47,10 +48,14 @@ async def smart_alerts(query: str, mock_disaster: bool=False):
         event_id = str(uuid.uuid4())
 
         logger.info(event_id, llm_input, screen_result, mock = False)
-        # Persist the disaster event
+        summarized_message = summarize_disaster_report(screen_result)
+        print("audit: summarized message: " + summarized_message)
+
+        # persist the disaster event
         persist_disaster_event(
-            event_id, llm_input, screen_result, mock=False
+           event_id, llm_input, summarized_message, mock=False
         )
+
     else:
         logger.info("No disaster-related content found.")
 

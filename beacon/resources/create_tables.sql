@@ -31,3 +31,4 @@ CREATE TABLE twitter.tweet_data_mock (
     generated_response TEXT,        -- Stores LLM generated response
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW() -- Timestamp of when the row is added
 );
+

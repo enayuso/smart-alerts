@@ -37,7 +37,7 @@ def persist_disaster_event(tweet_id, tweet, gen_text, mock):
     query = f"""
         INSERT INTO {tweet_data_table(mock)} (tweet_id, tweet_text, generated_response)
         VALUES (%s, %s, %s)
-        ON CONFLICT (tweet_id) DO NOTHING 
+        ON CONFLICT (tweet_id) DO NOTHING
         """
     values = (tweet_id, tweet, gen_text)
     execute_query(conn, query, values)

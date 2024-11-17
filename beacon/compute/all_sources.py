@@ -100,6 +100,7 @@ def google_search(query, serpapi_key, num_results=5):
         "num": num_results,
     }
     response = requests.get(url, params=params)
+    print("Audit: Querying google search.")
     if response.status_code == 200:
         results = response.json().get("organic_results", [])
         return [
