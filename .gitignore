@@ -1,0 +1,4 @@
+/.env
+/beacon/local_run_helper.py
+*.db
+/*/accounts.db
