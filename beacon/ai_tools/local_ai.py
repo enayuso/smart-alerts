@@ -26,7 +26,7 @@ def summarize_disaster_report(message):
                 analyze:\n\n {message}''')
     return query_llm(user_query)
 
-def query_llm(prompt, model="llama-3.2-3b-instruct", temperature=0, max_tokens=20000):
+def query_llm(prompt, model="llama-3.2-1b-instruct", temperature=0, max_tokens=20000):
     """
     Queries the locally hosted LLM and extracts the assistant's response.
 
